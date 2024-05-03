@@ -4,9 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Silent Captcha Example</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        input[type="text"] {
+            padding: 10px;
+            margin-top: 20px;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            width: calc(100% - 24px); /* Adjust width to account for padding and border */
+        }
+        #message {
+            color: #4CAF50;
+            margin-top: 20px;
+            font-size: 18px;
+            display: none; /* Initially hidden */
+        }
+    </style>
     <script src="app.js" defer></script>
 </head>
 <body>
-    <input type="text" id="testInput" placeholder="Type something...">
+    <div class="container">
+        <h1>Welcome to Silent Captcha Demo</h1>
+        <input type="text" id="testInput" placeholder="Start typing...">
+        <p id="message">You are not a robot</p>
+    </div>
 </body>
 </html>
