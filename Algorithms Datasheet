@@ -1,0 +1,187 @@
+
+
+
+
+//Algorithm 1
+//Uses a decision tree classifier to analyze the data.
+//Decision trees split the data based on features to make decisions.
+//Suitable for problems where the relationships between features are important.
+
+
+npm install decision-tree
+
+const DecisionTree = require('decision-tree');
+
+// Sample training data (features and labels)
+const trainingData = [
+    { x: 10, y: 20, time: 100, label: 'human' },
+    { x: 15, y: 25, time: 105, label: 'human' },
+    { x: 8, y: 18, time: 95, label: 'bot' },
+    { x: 12, y: 22, time: 110, label: 'bot' },
+    // Add more training data as needed
+];
+
+// Extract features and labels from training data
+const features = trainingData.map(data => [data.x, data.y, data.time]);
+const labels = trainingData.map(data => data.label);
+
+// Create a decision tree classifier
+const dt = new DecisionTree(features, labels);
+
+// Sample test data (features only)
+const testData = { x: 11, y: 21, time: 102 };
+
+// Classify the test data using the decision tree
+const result = dt.predict([testData.x, testData.y, testData.time]);
+
+// Output the classification result
+console.log(result); // Output: 'human' or 'bot'
+
+// Use the classification result in your application logic
+// For example, you can send it as a response in your Express route
+res.status(200).json({ message: result });
+
+
+
+
+
+//Algorithm 2
+//Uses a random forest classifier, which is an ensemble of decision trees.
+//Random forests train multiple decision trees and combine their outputs to make a final decision.
+//Often more robust and less prone to overfitting than a single decision tree.
+
+
+npm install random-forest
+
+const RandomForest = require('random-forest');
+
+// Sample training data (features and labels)
+const trainingData = [
+    { x: 10, y: 20, time: 100, label: 'human' },
+    { x: 15, y: 25, time: 105, label: 'human' },
+    { x: 8, y: 18, time: 95, label: 'bot' },
+    { x: 12, y: 22, time: 110, label: 'bot' },
+    // Add more training data as needed
+];
+
+// Extract features and labels from training data
+const features = trainingData.map(data => [data.x, data.y, data.time]);
+const labels = trainingData.map(data => data.label);
+
+// Create a Random Forest classifier with 10 trees
+const rf = new RandomForest(features, labels, { numTrees: 10 });
+
+// Sample test data (features only)
+const testData = { x: 11, y: 21, time: 102 };
+
+// Classify the test data using the Random Forest
+const result = rf.predict([testData.x, testData.y, testData.time]);
+
+// Output the classification result
+console.log(result); // Output: 'human' or 'bot'
+
+// Use the classification result in your application logic
+// For example, you can send it as a response in your Express route
+res.status(200).json({ message: result });
+
+
+//Algorithm 3
+//Uses a Naive Bayes classifier, which is based on Bayes' theorem and assumes independence between features.
+//Simple and efficient, especially for text classification tasks.
+//Requires less training data compared to other algorithms.
+
+
+npm install naivebayes
+
+const NaiveBayes = require('naivebayes');
+
+// Sample training data (features and labels)
+const trainingData = [
+    { x: 10, y: 20, time: 100, label: 'human' },
+    { x: 15, y: 25, time: 105, label: 'human' },
+    { x: 8, y: 18, time: 95, label: 'bot' },
+    { x: 12, y: 22, time: 110, label: 'bot' },
+    // Add more training data as needed
+];
+
+// Extract features and labels from training data
+const features = trainingData.map(data => ({ x: data.x, y: data.y, time: data.time }));
+const labels = trainingData.map(data => data.label);
+
+// Create a Naive Bayes classifier
+const nb = new NaiveBayes();
+
+// Train the classifier
+for (let i = 0; i < features.length; i++) {
+    nb.learn(features[i], labels[i]);
+}
+
+// Sample test data (features only)
+const testData = { x: 11, y: 21, time: 102 };
+
+// Classify the test data using the Naive Bayes classifier
+const result = nb.predict(testData);
+
+// Output the classification result
+console.log(result); // Output: 'human' or 'bot'
+
+// Use the classification result in your application logic
+// For example, you can send it as a response in your Express route
+res.status(200).json({ message: result });
+
+
+
+//Algorithm 4
+//Uses a k-NN classifier, which classifies new data points based on the majority class of their k nearest neighbors in the training set.
+//Simple and intuitive, but can be computationally expensive for large datasets.
+//Performance highly depends on the choice of k and the distance metric.
+
+
+
+npm install ml-knn
+
+const KNN = require('ml-knn');
+
+// Sample training data (features and labels)
+const trainingData = [
+    { x: 10, y: 20, time: 100, label: 'human' },
+    { x: 15, y: 25, time: 105, label: 'human' },
+    { x: 8, y: 18, time: 95, label: 'bot' },
+    { x: 12, y: 22, time: 110, label: 'bot' },
+    // Add more training data as needed
+];
+
+// Extract features and labels from training data
+const features = trainingData.map(data => [data.x, data.y, data.time]);
+const labels = trainingData.map(data => data.label);
+
+// Create a k-NN classifier with k=3 (number of neighbors to consider)
+const knn = new KNN();
+
+// Train the classifier
+knn.train(features, labels);
+
+// Sample test data (features only)
+const testData = [[11, 21, 102]];
+
+// Classify the test data using the k-NN classifier
+const result = knn.predict(testData);
+
+// Output the classification result
+console.log(result); // Output: ['human'] or ['bot']
+
+// Use the classification result in your application logic
+// For example, you can send it as a response in your Express route
+res.status(200).json({ message: result[0] });
+
+
+
+
+
+
+
+
+
+
+
+
