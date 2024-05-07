@@ -38,5 +38,5 @@ document.addEventListener('mousemove', () => {
     setTimeout(() => {
         const messageElement = document.getElementById('message');
         messageElement.style.display = 'block';  // Show the message
-    }, 5000);  // Delay of 5000 milliseconds (5 seconds)
+    }, 2000);  // Delay of 2000 milliseconds (1 seconds)
 }, { once: true });
