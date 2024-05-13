@@ -5,6 +5,7 @@ const cors = require('cors');
 
 const app = express();
 const port = 3000;
+app.get('/favicon.ico', (req, res) => res.status(204).end());
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -28,46 +29,49 @@ function analyzeMouseData(data) {
     }
 
     let speedChanges = 0;
-    let lastDistance = 0;
-    let lastTime = data[0].time;
     let directionChanges = 0;
-    let lastDirection = null;
-    let dwellTimes = 0;
-
-    // Initialize the first speed calculation
-    let speed = 0; // Define speed here to ensure it is accessible throughout
+    let lastPosition = data[0];
+    let speeds = [];
+    let angles = [];
 
     for (let i = 1; i < data.length; i++) {
-        const dx = data[i].x - data[i-1].x;
-        const dy = data[i].y - data[i-1].y;
+        const dx = data[i].x - lastPosition.x;
+        const dy = data[i].y - lastPosition.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
-        const timeDiff = data[i].time - lastTime;
+        const timeDiff = (data[i].time - lastPosition.time) / 1000; // Time in seconds
 
-        if (timeDiff > 0) {  // Avoid division by zero
-            speed = distance / timeDiff; // Calculate speed and update it here
-            if (Math.abs(speed - lastDistance) > 5) { // Use a practical threshold
+        if (timeDiff > 0) {
+            const speed = distance / timeDiff;
+            speeds.push(speed);
+            // Calculate direction change in degrees
+            const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+            angles.push(angle);
+
+            // Detecting speed change
+            if (i > 1 && Math.abs(speed - speeds[i - 2]) > 1) { // More sensitive threshold
                 speedChanges++;
             }
-            lastDistance = speed;
-            lastTime = data[i].time;
+
+            // Detecting direction change
+            if (i > 1 && Math.abs(angle - angles[i - 2]) > 10) { // More sensitive threshold
+                directionChanges++;
+            }
         }
 
-        // Calculate direction
-        const direction = Math.atan2(dy, dx);
-        if (lastDirection !== null && Math.abs(direction - lastDirection) > 0.1) { // Set a threshold for direction change
-            directionChanges++;
-        }
-        lastDirection = direction;
-
-        // Calculate dwell times if speed is very low
-        if (speed < 0.1) { dwellTimes++; }
+        lastPosition = data[i];
     }
 
+    // Analyze overall speed and angle variances
+    const avgSpeed = speeds.reduce((a, b) => a + b, 0) / speeds.length;
+    const speedVariance = speeds.reduce((a, b) => a + (b - avgSpeed) ** 2, 0) / speeds.length;
+    const isHuman = speedVariance > 1 && directionChanges > 5; // Example logic for determining human-like behavior
+
     return {
-        isHuman: true, // Placeholder value, implement your own logic here
-        speedChanges: speedChanges,
-        directionChanges: directionChanges,
-        dwellTimes: dwellTimes
+        isHuman,
+        speedChanges,
+        directionChanges,
+        avgSpeed,
+        speedVariance
     };
 }
 
