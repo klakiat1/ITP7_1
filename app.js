@@ -27,7 +27,7 @@ function sendDataToServer(data) {
             document.getElementById('humanMessage').style.display = 'block';
         } else {
             // Redirecting if robot behavior is detected
-            window.location.href = "https://example.com"; // Change this URL to your preferred "You have been logged out" or warning page.
+            window.location.href = "https://example.com"; 
         }
     })
     .catch((error) => {
