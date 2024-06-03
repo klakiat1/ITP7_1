@@ -12,7 +12,6 @@ document.addEventListener('mousemove', (event) => {
         mouseEvents = []; // Reset the array after sending
     }
 });
-
 function sendDataToServer(data) {
     fetch('http://localhost:3000/capture', {
         method: 'POST',
@@ -23,15 +22,19 @@ function sendDataToServer(data) {
     })
     .then(response => response.json())
     .then(data => {
-        console.log("Response from server:", data); // Log the response from the server
+        console.log("Response from server:", data);
         if (data.message === 'Human') {
-            document.getElementById('message').style.display = 'block'; // Show message if human
+            document.getElementById('humanMessage').style.display = 'block';
+        } else {
+            // Redirecting if robot behavior is detected
+            window.location.href = "https://example.com"; // Change this URL to your preferred "You have been logged out" or warning page.
         }
     })
     .catch((error) => {
-        console.error("Error sending data:", error); // Log any errors in the fetch operation
+        console.error("Error sending data:", error);
     });
 }
+
 
 
 // Show message after 5 seconds of the first mouse move
